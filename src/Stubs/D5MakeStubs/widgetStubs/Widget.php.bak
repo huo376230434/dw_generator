@@ -1,0 +1,50 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Administrator
+ * Date: 2017/7/26
+ * Time: 9:27
+ */
+
+namespace App\Admin\Extensions\Widgets;
+use Illuminate\Contracts\Support\Renderable;
+use Encore\Admin\Widgets\Widget;
+use Encore\Admin\Admin;
+
+class DummyWidgetUpperModel extends Widget implements Renderable {
+
+    /**
+     * @var string
+     */
+    protected $view = 'admin.base_extends.DummyWidgetModel';
+
+    //params_define_hook
+
+    /**
+     * Box constructor.
+     *
+     * @param string $title
+     * @param string $content
+     */
+    public function __construct( //params_formal_hook)
+    {
+    //params_add_value_hook
+        parent::__construct();
+
+    }
+
+
+//admin_js_function_hook
+
+    public function render(){
+
+
+//admin_js_hook
+        $data = [
+    //params_to_view_hook
+
+        ];
+
+        return view($this->view, $data)->render();
+    }
+}
