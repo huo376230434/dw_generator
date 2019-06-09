@@ -1,0 +1,21 @@
+{
+    "name": "huojunhao/dw_generator",
+    "require": {
+        "laravel/framework": "^5.7",
+        "laravel/dusk": "^5.0",
+        "phpunit/phpunit": "^7.0"
+
+    },
+    "autoload": {
+        "psr-4": {
+            "Huojunhao\\DwGenerator\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Huojunhao\\DwGenerator\\DwGeneratorServiceProvider"
+            ]
+        }
+    }
+}
