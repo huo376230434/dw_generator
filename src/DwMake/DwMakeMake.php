@@ -63,7 +63,7 @@ class DwMakeMake extends Command
     {
 
         $this->stub_dir = $this->getBaseStubDir().'/makeStubs/';
-        $this->command_dir = app_path()."/Generator/";
+        $this->command_dir = __DIR__.'/';
         $this->command_name = ucfirst($this->argument("command_name"));
         if (!$this->command_name) {
             throw new \Exception("command_name必填");
@@ -73,6 +73,9 @@ class DwMakeMake extends Command
             throw new \Exception("命令已经存在");
         }
     }
+
+
+
 
 
     protected function getFileName()

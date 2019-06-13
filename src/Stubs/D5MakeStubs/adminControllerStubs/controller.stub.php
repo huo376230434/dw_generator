@@ -1,7 +1,8 @@
 <?php
 
 namespace DummyControllerNamespace;
-use App\Admin\Extensions\AdminBase\AdminUtil;
+use App\Admin\Controllers\AdminBase\ModelForm;
+use App\Admin\Extensions\BaseExtends\AdminUtil;
 use App\Admin\Extensions\AdminException;
 
 use App\Admin\Controllers\AdminBase\AdminController;
@@ -11,17 +12,17 @@ use DummyControllerNamespace\ControllerTrait\DummyControllerClassExtraTrait;
 use DummyModelNamespace;
 use Encore\Admin\Grid\Tools\BatchActions;
 use Encore\Admin\Show;
+use App\Admin\Extensions\BaseExtends\Widgets\NormalLink;
 
-use App\Admin\Extensions\AdminBase\CsvExporter\CommonExporter;
+use App\Admin\Extensions\BaseExtends\CsvExporter\CommonExporter;
 use App\Admin\Extensions\CusAdmin;
 use App\Http\Controllers\Controller;
-use Encore\Admin\Controllers\ModelForm;
-use App\Admin\Extensions\AdminBase\Widgets\ExcelBtn;
-use App\Admin\Extensions\AdminBase\Widgets\DereplicateBackBtn;
+use App\Admin\Extensions\BaseExtends\Widgets\ExcelBtn;
+use App\Admin\Extensions\BaseExtends\Widgets\DereplicateBackBtn;
 use Illuminate\Support\Facades\DB;
-use App\Admin\Extensions\AdminBase\Widgets\DoWithConfirm;
-use App\Admin\Extensions\AdminBase\Widgets\Batch\BatchDoWithConfirm;
-use App\Admin\Extensions\AdminBase\Widgets\Batch\BatchOperateWithMsg;
+use App\Admin\Extensions\BaseExtends\Widgets\DoWithConfirm;
+use App\Admin\Extensions\BaseExtends\Widgets\Batch\BatchDoWithConfirm;
+use App\Admin\Extensions\BaseExtends\Widgets\Batch\BatchOperateWithMsg;
 use App\Admin\Extensions\Form;
 use App\Admin\Extensions\Grid;
 use App\Admin\Extensions\Grid\Displayers\Actions;
@@ -39,7 +40,6 @@ class DummyControllerClass extends AdminController
 
     protected $default_filter = [];
 
-
     protected $forbidden_actions = [
         //forbidden_action_hook
     ];
@@ -48,7 +48,6 @@ class DummyControllerClass extends AdminController
     {
         $this->middleware("forbidden")->only($this->forbidden_actions);
     }
-
 
 //    默认的filter
     protected function initDefaultFilter()
@@ -68,17 +67,16 @@ class DummyControllerClass extends AdminController
      *
      * @return Content
      */
-    public function index()
+    public function index(Content $content)
     {
         //确认是否有默认filter
         if ($url = $this->checkFilter()) {
             return redirect($url);
         };
-        return CusAdmin::content(function (Content $content) {
-            $content->header('title_header');
-            $content->description('列表');
-            $content->body($this->grid());
-        });
+        AdminUtil::headerTitle($content,"title_header",'列表');
+
+        $content->body($this->grid());
+        return $content;
     }
 
     /**
@@ -87,16 +85,18 @@ class DummyControllerClass extends AdminController
      * @param $id
      * @return Content
      */
-    public function edit($id)
+    public function edit($id,Content $content)
     {
-        return CusAdmin::content(function (Content $content) use ($id) {
-            $content->header('title_header');
-            $content->description('编辑');
-            $this->edit_id = $id;
-            $this->edit_obj = DummyNameModel::find($id);
 
-            $content->body($this->form()->edit($id));
-        });
+//        $content->header('title_header');
+//        $content->description('编辑');
+        AdminUtil::headerTitle($content,"title_header",'编辑');
+
+        $this->edit_id = $id;
+        $this->edit_obj = DummyNameModel::find($id);
+
+        $content->body($this->form()->edit($id));
+        return $content;
     }
 
     /**
@@ -104,13 +104,14 @@ class DummyControllerClass extends AdminController
      *
      * @return Content
      */
-    public function create()
+    public function create(Content $content)
     {
-        return CusAdmin::content(function (Content $content) {
-            $content->header('title_header');
-            $content->description('创建');
-            $content->body($this->form());
-        });
+//        $content->header('title_header');
+//        $content->description('创建');
+        AdminUtil::headerTitle($content,"title_header",'创建');
+
+        $content->body($this->form());
+        return $content;
     }
 
     /**
@@ -120,38 +121,35 @@ class DummyControllerClass extends AdminController
      */
     protected function grid()
     {
-        return CusAdmin::grid(DummyNameModel::class, function (Grid $grid) {
-            $_this = $this;
-            $grid->id('ID')->sortable();
-            $grid->paginate(10);
+        $grid = new Grid(new DummyNameModel());
+        $_this = $this;
+        $grid->id('ID')->sortable();
+        $grid->paginate(10);
 //            $grid->expandFilter();
-            $grid->actions(function ( Actions $actions)use($_this) {
-                $_this->defaultGridActions($actions, $_this);
-            });
-
-            $grid->tools(function (Grid\Tools $tools) use ($_this) {
-                $_this->defaultGridTools($tools, $_this);
-                $tools->batch(function (BatchActions $batch) use ($_this) {
-                    $_this->defaultGridBatchs($batch, $_this);
-                });
-            });
-
-            $grid->filter(function(Grid\Filter $filter) use ($_this){
-                $_this->defaultGridFilters($filter, $_this);
-            });
-
-            $this->defaultGrid($grid, $_this);
-            $this->export($grid);
-
-            $grid->created_at("创建时间")->sortable();
-            $grid->updated_at("修改时间")->sortable();
+        $grid->actions(function ( Actions $actions)use($_this) {
+            $_this->defaultGridActions($actions, $_this);
         });
+        $grid->tools(function (Grid\Tools $tools) use ($_this) {
+            $_this->defaultGridTools($tools, $_this);
+            $tools->batch(function (BatchActions $batch) use ($_this) {
+                $_this->defaultGridBatchs($batch, $_this);
+            });
+        });
+        $grid->filter(function(Grid\Filter $filter) use ($_this){
+            $_this->defaultGridFilters($filter, $_this);
+        });
+        $this->defaultGrid($grid, $_this);
+        $this->export($grid);
+        $grid->created_at("创建时间")->sortable();
+        $grid->updated_at("修改时间")->sortable();
+
+        return $grid;
     }
 
 
     protected function export(Grid $grid)
     {
-//            $grid->disableExport();
+            $grid->disableExport();
 //            是否excel导出功能，如果有，则取消注释并完善代码
         $grid->exporter(new CommonExporter($grid,"table",
             //todo 补充excel 数据
@@ -178,7 +176,6 @@ class DummyControllerClass extends AdminController
 //                        return $is_sale==1 ? "已售出" : "未售";
 //                    }
             ]
-
         ));
     }
 
@@ -191,24 +188,21 @@ class DummyControllerClass extends AdminController
      */
     protected function form()
     {
-        return CusAdmin::form(DummyNameModel::class, function (Form $form) {
-            $_this = $this;
-            $form->display('id', 'ID');
+        $form = new Form(new DummyNameModel());
+        $_this = $this;
+        $form->display('id', 'ID');
 
-            AdminUtil::DefaultFormOptimize($form);
-
-            $this->defaultForm($form ,$_this);
-
-            $form->saved(function(Form $form){
-                if ($form->action_mode == "update") {
-                    $msg =  " 在 title_header 模块 修改了 : $form->dummy_row_show_field "." 的信息";
-                } else{
-                    $msg = "在 title_header 模块  添加了 : $form->dummy_row_show_field";
-                }
-                OperateFlow::log($msg);
-            });
-
+        AdminUtil::DefaultFormOptimize($form);
+        $this->defaultForm($form ,$_this);
+        $form->saved(function(Form $form){
+            if ($form->action_mode == "update") {
+                $msg =  " 在 title_header 模块 修改了 : $form->dummy_row_show_field "." 的信息";
+            } else{
+                $msg = "在 title_header 模块  添加了 : $form->dummy_row_show_field";
+            }
+            OperateFlow::log($msg);
         });
+        return $form;
     }
 
 
@@ -252,7 +246,5 @@ class DummyControllerClass extends AdminController
             ->body(CusAdmin::show(DummyNameModel::findOrFail($id), function (Show $show) {
                 //show_hook
             }));
-
-
     }
 }

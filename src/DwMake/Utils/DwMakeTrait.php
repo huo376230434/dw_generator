@@ -35,6 +35,12 @@ trait DwMakeTrait{
 //        return storage_path('/stubs/D5MakeStubs');
     }
 
+
+    protected function getBaseGeneratorSrcDir()
+    {
+        return __DIR__ . '/../../';
+    }
+
 //
 //    private function initSimpleDummy($words_arr,$refresh=false)
 //    {

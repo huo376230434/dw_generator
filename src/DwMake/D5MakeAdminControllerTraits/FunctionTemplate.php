@@ -16,12 +16,9 @@ trait FunctionTemplate{
 
    public function {$v['url']}(Content \$content)
     {
+        AdminUtil::headerTitle(\$content,'$this->title_header 管理','');
 
-        return Admin::content(function (Content \$content) {
-            \$content->header('$this->title_header 管理');
-            \$content->description('');
-
-            \$form = Admin::form(\App\Model\\$this->model_name::class, function (Form \$form) {
+            \$form = new Form(new \App\Model\\$this->model_name());
 
                 AdminUtil::DefaultFormOptimize(\$form);
    
@@ -32,10 +29,11 @@ trait FunctionTemplate{
             
 //                \$form->datetime("expired_at", "过期时间");
                 \$form->setAction("{$v['url']}Handle");
-            });
+       
 
             \$content->body(\$form);
-        });
+            return \$content;
+      
     }
     
 

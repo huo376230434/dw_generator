@@ -6,9 +6,9 @@
  * Time: 9:27
  */
 
-namespace App\Admin\Extensions\AdminExtends\Widgets;
-use App\Admin\Extensions\AdminBase\Widgets\BaseBtpModal;
-use App\Admin\Extensions\AdminBase\Widgets\BaseBtpModalTrait;
+namespace App\Admin\Extensions\Custom\Widgets;
+use App\Admin\Extensions\BaseExtends\Widgets\BaseBtpModal;
+use App\Admin\Extensions\BaseExtends\Widgets\BaseBtpModalTrait;
 use App\Admin\Extensions\CusAdmin;
 use Illuminate\Contracts\Support\Renderable;
 use Encore\Admin\Widgets\Widget;

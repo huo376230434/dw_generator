@@ -7,6 +7,8 @@
  */
 namespace Huojunhao\DwGenerator\DwMake\CommandTraits\D5MakeAdminControllerTraits;
 
+use App\Admin\Extensions\BaseExtends\Widgets\NormalLink;
+
 trait  AddExtraFunction{
     use FunctionTemplate;
 
@@ -37,22 +39,31 @@ trait  AddExtraFunction{
                     break;
                 case "action" :
                     $extra_functions = $this->extraActions($extra_functions, $v);
+                case "action_page_form":
+                    $extra_functions = $this->actionPageFormFunction($extra_functions,$v);
                     break;
-
             }
-
 
             //添加函数样板代码到控制器中
             $this->words_arr['//controller_trait_hook'] = $extra_functions;
 
         }
-
         $this->words_arr['//controller_trait_hook'] .= <<<DDD
 //controller_trait_hook
 DDD;
-
         return $this->words_arr;
+    }
 
+    protected function actionPageFormFunction($extra_functions,$v)
+    {
+        $extra_functions = $this->hasPageFunction($extra_functions,$v,false);
+        $v['button_type'] = 'NormalLink';
+        //            添加action按钮
+        $this->grid_action[] = <<<DDD
+        
+        \$actions->append(new {$v['button_type']}("{$v['name']}",url('admin/$this->route_uri/{$v['url']}'),  \$row->id));
+DDD;
+        return $extra_functions;
     }
 
 
@@ -102,7 +113,7 @@ DDD;
     }
 
 
-    protected function hasPageFunction($extra_functions,$v)
+    protected function hasPageFunction($extra_functions,$v,$add_btn=true)
     {
 
         if(!$this->methodIsAdded($v)){
@@ -133,15 +144,17 @@ DDD;
 
   } ;
 
-
-        //grid 中添加按钮
-        $this->grid_tools[] = <<<DDD
+        if ($add_btn) {
+            //grid 中添加按钮
+            $this->grid_tools[] = <<<DDD
               \$tools->append("<div class=\"btn-group pull-right\" style=\"margin-right: 10px\">
     <a href=\"/admin/$this->route_uri/{$v['url']}\" class=\"btn btn-sm btn-info\">
         <i class=\"fa fa-save\"></i>&nbsp;&nbsp;{$v['name']}
     </a>
 </div>");
 DDD;
+        }
+
         return $extra_functions;
 
     }

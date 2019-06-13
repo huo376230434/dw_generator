@@ -5,7 +5,7 @@ namespace App\DummyNamespacePrefix\Controllers;
 
 
 use App\Admin\Controllers\AdminBase\AdminController;
-use App\Admin\Extensions\AdminBase\AdminUtil;
+use App\Admin\Extensions\BaseExtends\AdminUtil;
 use App\Admin\Extensions\AdminException;
 use App\Admin\Extensions\Form;
 use App\Model\OperateFlow;

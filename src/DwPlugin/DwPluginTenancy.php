@@ -1,12 +1,12 @@
 <?php
 
-namespace Huojunhao\DwGenerator\DwMake;
+namespace Huojunhao\DwGenerator\DwPlugin;
 
 use Huojunhao\DwGenerator\DwMake\Utils\DwMakeTrait;
 use App\Lib\Common\CommonBase\FileUtil;
 use Illuminate\Console\Command;
 
-class DwMakeTenancy extends Command
+class DwPluginTenancy extends Command
 {
     use DwMakeTrait;
     /**
@@ -14,7 +14,7 @@ class DwMakeTenancy extends Command
      *
      * @var string
      */
-    protected $signature = 'dm:tenancy  {--remove} ';
+    protected $signature = 'dp:tenancy  {--remove} ';
 
     /**
      * The console command description.

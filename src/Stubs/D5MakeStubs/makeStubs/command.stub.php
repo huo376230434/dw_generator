@@ -2,6 +2,7 @@
 
 namespace Huojunhao\DwGenerator\DwMake;
 
+use App\Lib\Common\CommonBase\FileUtil;
 use Huojunhao\DwGenerator\DwMake\Utils\DwMakeTrait;
 use function GuzzleHttp\Promise\task;
 use Illuminate\Console\Command;
@@ -14,7 +15,7 @@ class DwMakeDummyUpperCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'dm:DummyCommand  {command_param} ';
+    protected $signature = 'dm:DummyCommand  {command_param} {--remove} ';
 
     /**
      * The console command description.
@@ -51,6 +52,13 @@ class DwMakeDummyUpperCommand extends Command
         $this->init_configs();//初始化配置项
         dump($this->stub_dir);
 
+
+        if ($this->option('remove')) {
+
+            $this->handleRemove();
+            return ;
+
+        }
         $this->makeCommand();
 
     }
@@ -76,16 +84,41 @@ class DwMakeDummyUpperCommand extends Command
     {
 
         $dummies = [
-            "DummyCommand" => snake_case($this->command_name),
-            "DummyUpperCommand" => $this->command_name
+            "DummyCommand" => snake_case($this->command_param),
+            "DummyUpperCommand" => $this->command_param
         ];
+
+        $this->quickTask($dummies, $this->getTasks());
+
+    }
+
+
+
+    protected function getTasks()
+    {
         $tasks = [
             [
                 'stub_path' => $this->stub_dir . 'DummyCommand.stub.php',
-                'des_path' => $this->command_dir . $this->command_prefix . $this->command_name . ".php"
+                'des_path' => $this->des_dir  . $this->command_param . ".php"
             ]
         ];
-        $this->quickTask($dummies, $tasks);
+        return $tasks;
+
+    }
+
+    protected function handleRemove()
+    {
+        foreach ($this->getTasks() as $task) {
+            FileUtil::unlinkFileOrDir($task['des_path']);
+        }
+        $this->removedCallback();
+
+    }
+
+
+    protected function removedCallback()
+    {
+        $this->warn('删除完...');
 
     }
 
