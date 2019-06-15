@@ -122,8 +122,6 @@ DDD;
         }
 
 
-
-
     }
 
 
@@ -135,7 +133,7 @@ DDD;
 
         $this->stub_dir = $this->getBaseStubDir().'/btp_modalStubs/';
 
-        $this->modal_class_dir = app_path("Admin/Extensions/AdminExtends/Widgets/");
+        $this->modal_class_dir = app_path("Admin/Extensions/BaseExtends/Widgets/");
         $this->modal_blade_dir = resource_path("views/admin/custom/modals/");
         $this->piece_blade_dir = resource_path("views/admin/custom/pieces/");
 
