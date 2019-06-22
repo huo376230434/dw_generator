@@ -39,6 +39,7 @@ trait  AddExtraFunction{
                     break;
                 case "action" :
                     $extra_functions = $this->extraActions($extra_functions, $v);
+                    break;
                 case "action_page_form":
                     $extra_functions = $this->actionPageFormFunction($extra_functions,$v);
                     break;
