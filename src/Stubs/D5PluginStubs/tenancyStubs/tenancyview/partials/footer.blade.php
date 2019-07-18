@@ -14,5 +14,5 @@
 
     </div>
     <!-- Default to the left -->
-    技术支持 <strong>： 点五科技</strong>
+    技术支持 <strong>： 浩诚科技</strong>
 </footer>

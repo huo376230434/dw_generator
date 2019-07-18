@@ -6,17 +6,9 @@
 
         @include('admin::form.error')
 
-        <div class="input-group">
+        <div class="wrap">
 
-            @if ($prepend)
-            <span class="input-group-addon">{!! $prepend !!}</span>
-            @endif
-
-            <input {!! $attributes !!} />
-
-            @if ($append)
-                <span class="input-group-addon clearfix">{!! $append !!}</span>
-            @endif
+            <input  class="form-control" />
 
         </div>
 

@@ -34,3 +34,23 @@ class Column{
         return '';
     }
 }
+
+
+
+
+
+
+
+
+
+namespace Encore\Admin\Form\Field;
+class Field {
+    /**
+     * @return $this
+     */
+    public function labelRequired()
+    {
+        $this->label_required = true;
+        return $this;
+    }
+}
