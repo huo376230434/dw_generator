@@ -54,3 +54,14 @@ class Field {
         return $this;
     }
 }
+
+
+namespace Illuminate\Support;
+class Collection{
+
+    public $each;
+    public function __construct()
+    {
+        $this->each = new \Eloquent();
+    }
+}
