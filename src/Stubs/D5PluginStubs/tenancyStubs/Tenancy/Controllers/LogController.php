@@ -59,7 +59,7 @@ class LogController extends Controller
             $actions->disableView();
         });
 
-        $grid->disableCreation();
+        $grid->disableCreateButton();
 
         $grid->filter(function ($filter) {
             $userModel = config('admin.database.users_model');

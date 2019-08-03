@@ -58,7 +58,7 @@ DDD;
         if($this->disable_add === 1){
             $this->grid_content .= <<<DDD
 
-          \$grid->disableCreation();
+          \$grid->disableCreateButton();
 
 DDD;
         }
