@@ -125,7 +125,7 @@ class DummyControllerClass extends AdminController
         $_this = $this;
         $grid->id('ID')->sortable();
         $grid->paginate(10);
-//            $grid->expandFilter();
+            $grid->expandFilter();
         $grid->actions(function ( Actions $actions)use($_this) {
             $_this->defaultGridActions($actions, $_this);
         });
