@@ -9,7 +9,7 @@
 return [
     "name" => "test",//前台页面名称
     "title" => "测试",//中文描述
-    'controller' => 'InitAdminUserSeeder',//所属控制器名称
+    'controller' => 'InitAdminTablesSeeder',//所属控制器名称
     'function' => '',//方法名
     'add_js' => 1,//是否添加自定义JS
     'add_vue' => 1,
